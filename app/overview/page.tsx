@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Activity, Boxes, Cable, Cpu, GitBranch, Layers, Package, Route, Split } from 'lucide-react'
+import { Activity, Boxes, Cable, Cpu, Layers, Package, Route, Split } from 'lucide-react'
 import { PageHeader, Panel, SectionTitle } from '@/components/section-title'
 import { LinkButton } from '@/components/link-button'
 import { TopologyDiagram } from '@/components/topology-diagram'
@@ -93,7 +93,7 @@ export default function OverviewPage() {
           </div>
           <Panel className="font-mono text-sm">
             <p className="mb-3 text-xs uppercase tracking-widest text-cyan-glow">Simulation inputs → outputs</p>
-            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <ul className="space-y-2 text-muted-foreground">
                 <li>topology</li>
                 <li>routing_function</li>
@@ -101,7 +101,6 @@ export default function OverviewPage() {
                 <li>num_vcs</li>
                 <li>injection_rate</li>
               </ul>
-              <GitBranch className="size-6 text-amber-glow" aria-hidden="true" />
               <ul className="space-y-2">
                 <li>packet latency</li>
                 <li>network latency</li>
