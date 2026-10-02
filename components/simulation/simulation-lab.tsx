@@ -1,0 +1,141 @@
+'use client'
+
+import { useEffect, useMemo, useState } from 'react'
+import { Info, Pause, Play, RotateCcw } from 'lucide-react'
+import { SimulationControls } from '@/components/simulation/simulation-controls'
+import { NoCVisualizer } from '@/components/simulation/noc-visualizer'
+import { RoutingDecision } from '@/components/simulation/routing-decision'
+import { computeRoute, destinationFor, type SimConfig, trafficLabels } from '@/lib/noc'
+
+const initialConfig: SimConfig = {
+  topology: 'mesh',
+  k: 4,
+  routing: 'camar',
+  traffic: 'bitcomp',
+  vcs: 4,
+  injectionRate: 0.15,
+}
+
+export function SimulationLab() {
+  const [draft, setDraft] = useState<SimConfig>(initialConfig)
+  const [config, setConfig] = useState<SimConfig>(initialConfig)
+  const [source, setSource] = useState(0)
+  const [seed, setSeed] = useState(1)
+  const [step, setStep] = useState(0)
+  const [playing, setPlaying] = useState(false)
+
+  const safeSource = source < config.k * config.k ? source : 0
+  const destination = useMemo(
+    () => destinationFor(safeSource, config.k, config.traffic, seed),
+    [safeSource, config.k, config.traffic, seed],
+  )
+  const hops = useMemo(() => computeRoute(safeSource, destination, config, seed), [safeSource, destination, config, seed])
+  const path = useMemo(() => [safeSource, ...hops.map((h) => h.to)], [safeSource, hops])
+  const done = step >= hops.length
+
+  useEffect(() => {
+    if (!playing) return
+    if (done) {
+      setPlaying(false)
+      return
+    }
+    const id = setTimeout(() => setStep((s) => s + 1), 700)
+    return () => clearTimeout(id)
+  }, [playing, step, done])
+
+  const run = () => {
+    setConfig(draft)
+    if (source >= draft.k * draft.k) setSource(0)
+    setSeed((s) => s + 1)
+    setStep(0)
+    setPlaying(true)
+  }
+
+  const selectSource = (id: number) => {
+    setSource(id)
+    setStep(0)
+    setPlaying(false)
+  }
+
+  const reset = () => {
+    setStep(0)
+    setPlaying(false)
+  }
+
+  const ctrl =
+    'flex items-center gap-1.5 rounded-full border border-border px-4 py-1.5 text-sm transition hover:border-cyan-glow/60 disabled:opacity-40'
+
+  return (
+    <div className="grid gap-6 lg:grid-cols-[300px_1fr_320px]">
+      <SimulationControls config={draft} onChange={setDraft} onRun={run} />
+
+      <section className="rounded-2xl border border-border bg-card p-5 glow-border" aria-label="Network visualization">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <span className="rounded-full border border-cyan-glow/50 bg-cyan-glow/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-cyan-glow">
+              Interactive visualization
+            </span>
+            <p className="mt-2 font-mono text-xs text-muted-foreground">
+              {config.topology} {config.k}×{config.k} · {config.routing.toUpperCase()} · {trafficLabels[config.traffic]} ·{' '}
+              {config.vcs} VC · rate {config.injectionRate.toFixed(2)}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button type="button" className={ctrl} onClick={() => setPlaying(true)} disabled={playing || done || hops.length === 0}>
+              <Play className="size-3.5" aria-hidden="true" /> Start
+            </button>
+            <button type="button" className={ctrl} onClick={() => setPlaying(false)} disabled={!playing}>
+              <Pause className="size-3.5" aria-hidden="true" /> Pause
+            </button>
+            <button type="button" className={ctrl} onClick={reset}>
+              <RotateCcw className="size-3.5" aria-hidden="true" /> Reset
+            </button>
+          </div>
+        </div>
+
+        <NoCVisualizer
+          k={config.k}
+          topology={config.topology}
+          source={safeSource}
+          destination={destination}
+          path={path}
+          hops={hops}
+          step={step}
+          onSelectSource={selectSource}
+        />
+
+        {hops.length === 0 && (
+          <p className="mt-3 flex items-center gap-2 text-sm text-amber-glow">
+            <Info className="size-4" aria-hidden="true" /> This source maps to itself under {trafficLabels[config.traffic]}. Click
+            another router.
+          </p>
+        )}
+
+        <dl className="mt-5 grid grid-cols-2 gap-3 font-mono text-sm sm:grid-cols-4">
+          {[
+            ['Source', `Router ${safeSource}`],
+            ['Destination', `Router ${destination}`],
+            ['Current', `Router ${path[step] ?? safeSource}`],
+            ['Hops', `${Math.min(step, hops.length)} / ${hops.length}`],
+          ].map(([k, v]) => (
+            <div key={k} className="rounded-lg border border-border bg-background/40 p-3">
+              <dt className="text-xs text-muted-foreground">{k}</dt>
+              <dd className="mt-1">{v}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-3 overflow-x-auto whitespace-nowrap rounded-lg border border-border bg-background/40 p-3 font-mono text-sm">
+          <span className="text-muted-foreground">Route: </span>
+          {path.map((id, i) => (
+            <span key={`${id}-${i}`}>
+              <span className={i <= step ? 'text-cyan-glow' : ''}>{id}</span>
+              {i < path.length - 1 && <span className="text-muted-foreground"> → </span>}
+            </span>
+          ))}
+        </p>
+      </section>
+
+      <RoutingDecision hop={hops[step]} destination={destination} routing={config.routing} />
+    </div>
+  )
+}
