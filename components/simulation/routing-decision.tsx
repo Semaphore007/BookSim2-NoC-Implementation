@@ -1,5 +1,4 @@
 import type { Hop, Routing } from '@/lib/noc'
-import { DemoBadge } from '@/components/section-title'
 import { cn } from '@/lib/utils'
 
 export function RoutingDecision({
@@ -14,8 +13,7 @@ export function RoutingDecision({
   return (
     <section className="rounded-2xl border border-border bg-card/70 p-5" aria-live="polite">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <h3 className="font-serif text-lg font-semibold">Routing Decision</h3>
-        <DemoBadge>Demonstration</DemoBadge>
+        <h3 className="font-serif text-lg font-semibold">Route Preview</h3>
       </div>
 
       {!hop ? (
@@ -37,7 +35,6 @@ export function RoutingDecision({
           <ul className="space-y-2">
             {hop.candidates.map((c) => {
               const selected = c.dir === hop.selected
-              const pct = Math.round((c.credit / c.maxCredit) * 100)
               return (
                 <li
                   key={c.dir}
@@ -50,15 +47,6 @@ export function RoutingDecision({
                     <span className={selected ? 'text-cyan-glow' : ''}>
                       {c.dir} → R{c.next}
                     </span>
-                    <span className="text-xs text-muted-foreground">
-                      credits {c.credit}/{c.maxCredit}
-                    </span>
-                  </div>
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-secondary" aria-hidden="true">
-                    <div
-                      className={cn('h-full rounded-full', selected ? 'bg-cyan-glow' : 'bg-muted-foreground/50')}
-                      style={{ width: `${pct}%` }}
-                    />
                   </div>
                 </li>
               )
@@ -72,13 +60,13 @@ export function RoutingDecision({
               {hop.candidates.length < 2
                 ? 'only one minimal direction remains.'
                 : routing === 'camar'
-                  ? 'CAMAR picks the candidate with more available credit.'
-                  : 'XY routes the X dimension first, ignoring congestion.'}
+                  ? 'This deterministic preview picks the first minimal candidate; live CAMAR requires BookSim credit state.'
+                  : 'XY routes the X dimension first, then the Y dimension.'}
             </span>
           </p>
         </>
       )}
-      <p className="mt-4 text-xs text-muted-foreground">Credit values are illustrative, not measured.</p>
+      <p className="mt-4 text-xs text-muted-foreground">A route preview is not a cycle-accurate BookSim run.</p>
     </section>
   )
 }

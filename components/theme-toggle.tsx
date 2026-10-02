@@ -23,7 +23,7 @@ export function ThemeToggle() {
       title={isDark ? 'Switch to day mode' : 'Switch to night mode'}
       className="flex size-9 shrink-0 items-center justify-center rounded-full border border-cyan-glow/40 bg-secondary text-secondary-foreground transition-colors hover:border-cyan-glow/70 hover:bg-accent"
     >
-      {isDark ? <Sun className="size-4 text-amber-glow" aria-hidden="true" /> : <Moon className="size-4 text-cyan-glow" aria-hidden="true" />}
+      {isDark ? <Sun className="size-4 text-muted-foreground" aria-hidden="true" /> : <Moon className="size-4 text-muted-foreground" aria-hidden="true" />}
       <span className="sr-only">{isDark ? 'Switch to day mode' : 'Switch to night mode'}</span>
     </button>
   )

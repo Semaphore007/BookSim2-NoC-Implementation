@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
 import { AlertTriangle, ArrowDown, Code2 } from 'lucide-react'
-import { DemoBadge, PageHeader, SectionTitle } from '@/components/section-title'
+import { PageHeader, SectionTitle } from '@/components/section-title'
 import { SimulationLab } from '@/components/simulation/simulation-lab'
-import { SimpleChart } from '@/components/simple-chart'
 import { CodeBlock } from '@/components/code-block'
 import { LinkButton } from '@/components/link-button'
-import { demoLatencyData, demoThroughputData } from '@/lib/demo-data'
 
 export const metadata: Metadata = {
   title: 'Simulation Lab',
@@ -58,8 +56,9 @@ export default function SimulationPage() {
         >
           <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-glow" aria-hidden="true" />
           <p>
-            This interactive simulation demonstrates NoC routing behavior. Actual performance results should be
-            generated using the BookSim 2 project implementation.
+            The route animation is a deterministic preview, not a cycle-accurate BookSim run. Import a BookSim CSV in
+            the configuration panel to see measured values or interpolations between measurements. Without matching
+            dataset rows, performance estimates are not shown.
           </p>
         </div>
         <SimulationLab />
@@ -70,7 +69,7 @@ export default function SimulationPage() {
           <SectionTitle
             eyebrow="Task 1"
             title="Design-Space Exploration"
-            description="Each combination below becomes a BookSim run, swept from low injection rate toward saturation."
+            description="Import BookSim measurements in the simulator to view dataset-backed latency and throughput estimates for matching configurations."
           />
           <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {matrix.map(([label, values]) => (
@@ -86,22 +85,6 @@ export default function SimulationPage() {
               </div>
             ))}
           </dl>
-          <div className="mt-8 grid gap-6 lg:grid-cols-2">
-            <SimpleChart
-              title="Latency vs Injection Rate"
-              series={demoLatencyData}
-              xLabel="Injection rate"
-              yLabel="Latency (cycles)"
-              badge={<DemoBadge>Illustrative visualization</DemoBadge>}
-            />
-            <SimpleChart
-              title="Throughput vs Injection Rate"
-              series={demoThroughputData}
-              xLabel="Injection rate"
-              yLabel="Accepted throughput"
-              badge={<DemoBadge>Illustrative visualization</DemoBadge>}
-            />
-          </div>
         </div>
       </section>
 

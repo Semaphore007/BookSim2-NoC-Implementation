@@ -111,7 +111,7 @@ export function NoCVisualizer({
           const isSrc = id === source
           const isDst = id === destination
           const isCur = id === current
-          const strokeColor = isSrc ? 'var(--cyan)' : isDst ? 'var(--violet)' : onRoute.has(id) ? 'var(--amber)' : 'var(--electric)'
+          const strokeColor = isSrc ? 'var(--router-source)' : isDst ? 'var(--router-destination)' : onRoute.has(id) ? 'var(--router-route)' : 'var(--electric)'
           return (
             <g
               key={id}
@@ -133,12 +133,12 @@ export function NoCVisualizer({
                 width={node}
                 height={node}
                 rx="5"
-                fill={isCur ? '#0b2a52' : '#081a36'}
+                fill={isCur ? 'var(--router-current)' : '#081a36'}
                 stroke={strokeColor}
                 strokeOpacity={onRoute.has(id) || isSrc || isDst ? 1 : 0.6}
                 strokeWidth={isSrc || isDst ? 2.5 : 1.5}
               />
-              <text x={x} y={y + 3.5} textAnchor="middle" fontSize={k <= 4 ? 11 : 9} className="pointer-events-none fill-foreground font-mono">
+              <text x={x} y={y + 3.5} textAnchor="middle" fontSize={k <= 4 ? 11 : 9} fill="var(--router-label)" className="pointer-events-none font-mono">
                 {id}
               </text>
             </g>

@@ -45,10 +45,20 @@ export function SimulationControls({
   config,
   onChange,
   onRun,
+  benchmarkFileName,
+  benchmarkSampleCount,
+  benchmarkError,
+  onBenchmarkFile,
+  onClearBenchmark,
 }: {
   config: SimConfig
   onChange: (c: SimConfig) => void
   onRun: () => void
+  benchmarkFileName?: string
+  benchmarkSampleCount: number
+  benchmarkError?: string
+  onBenchmarkFile: (file?: File) => void
+  onClearBenchmark: () => void
 }) {
   const [open, setOpen] = useState(true)
   const set = <K extends keyof SimConfig>(key: K, value: SimConfig[K]) => onChange({ ...config, [key]: value })
@@ -130,6 +140,44 @@ export function SimulationControls({
             onChange={(e) => set('injectionRate', Number(e.target.value))}
             className="w-full accent-[var(--cyan)]"
           />
+        </div>
+        <div className="space-y-2 rounded-lg border border-border bg-background/40 p-3">
+          <label htmlFor="benchmark-file" className="block text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            BookSim benchmark CSV (optional)
+          </label>
+          <input
+            id="benchmark-file"
+            type="file"
+            accept=".csv,text/csv"
+            onChange={(event) => {
+              onBenchmarkFile(event.target.files?.[0])
+              event.currentTarget.value = ''
+            }}
+            className="block w-full text-xs text-muted-foreground file:mr-2 file:rounded-md file:border-0 file:bg-secondary file:px-2 file:py-1.5 file:text-foreground"
+          />
+          {benchmarkFileName ? (
+            <div className="flex items-center justify-between gap-2 text-xs">
+              <span className="min-w-0 break-all text-cyan-glow">
+                {benchmarkFileName} · {benchmarkSampleCount} samples loaded
+              </span>
+              <button type="button" onClick={onClearBenchmark} className="shrink-0 underline underline-offset-2">
+                Clear
+              </button>
+            </div>
+          ) : (
+            <p className="text-xs text-muted-foreground">Without data, this lab shows routes only—not performance predictions.</p>
+          )}
+          {benchmarkError && <p role="alert" className="text-xs text-destructive">{benchmarkError}</p>}
+          <details className="text-xs text-muted-foreground">
+            <summary className="cursor-pointer">CSV format</summary>
+            <code className="mt-1 block break-all font-mono">
+              topology,k,routing,traffic,vcs,injection_rate,avg_packet_latency,throughput
+            </code>
+            <span className="mt-1 block">
+              Alternatively, use injection_rate,latency,throughput; those rows are associated with the configuration
+              selected when imported. Use one row per measured rate.
+            </span>
+          </details>
         </div>
         <button
           type="button"

@@ -12,23 +12,36 @@ const segments: Segment[] = [
 ]
 
 const fullText = segments.map((s) => s.text).join('')
+const lastSegmentEnd = segments.reduce((length, segment) => length + segment.text.length, 0)
 const TYPE_SPEED_MS = 70
+const FULL_TEXT_PAUSE_TICKS = 14
+const EMPTY_TEXT_PAUSE_TICKS = 4
 
 function renderSegments(count: number, withCursor: boolean) {
-  let remaining = count
+  let offset = 0
   const nodes: React.ReactNode[] = []
   let cursorPlaced = false
 
   segments.forEach((seg, i) => {
-    const visible = seg.text.slice(0, Math.max(0, remaining))
-    remaining -= seg.text.length
-    const isTypingHere = withCursor && !cursorPlaced && remaining <= 0
+    const start = offset
+    const end = start + seg.text.length
+    const visibleCount = Math.min(Math.max(count - start, 0), seg.text.length)
+    offset = end
     nodes.push(
       <span key={i} className={seg.accent ? 'text-cyan-glow text-glow' : undefined}>
-        {visible}
+        {seg.text.slice(0, visibleCount)}
       </span>,
     )
-    if (isTypingHere) {
+    if (withCursor && !cursorPlaced && count >= start && count < end) {
+      cursorPlaced = true
+      nodes.push(
+        <span
+          key={`cursor-${i}`}
+          className="ml-1 inline-block h-[0.85em] w-[0.08em] translate-y-[0.1em] animate-blink bg-cyan-glow shadow-[0_0_12px_var(--cyan)]"
+        />,
+      )
+    }
+    if (withCursor && !cursorPlaced && i === segments.length - 1 && count >= end) {
       cursorPlaced = true
       nodes.push(
         <span
@@ -51,14 +64,26 @@ export function TypingHeadline() {
       setCount(fullText.length)
       return
     }
+    let direction: 1 | -1 = 1
+    let currentCount = 0
+    let pauseTicks = 0
     const id = window.setInterval(() => {
-      setCount((c) => {
-        if (c >= fullText.length) {
-          window.clearInterval(id)
-          return c
-        }
-        return c + 1
-      })
+      if (pauseTicks > 0) {
+        pauseTicks -= 1
+        return
+      }
+      if (currentCount === lastSegmentEnd && direction === 1) {
+        direction = -1
+        pauseTicks = FULL_TEXT_PAUSE_TICKS
+        return
+      }
+      if (currentCount === 0 && direction === -1) {
+        direction = 1
+        pauseTicks = EMPTY_TEXT_PAUSE_TICKS
+        return
+      }
+      currentCount += direction
+      setCount(currentCount)
     }, TYPE_SPEED_MS)
     return () => window.clearInterval(id)
   }, [])

@@ -25,10 +25,6 @@ export function HeroNetwork() {
       <svg viewBox="0 0 400 400" className="h-auto w-full" role="img">
         <title>4×4 mesh NoC with an highlighted route from R0 to R15</title>
         <defs>
-          <radialGradient id="core" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="var(--cyan)" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="var(--electric)" stopOpacity="0.2" />
-          </radialGradient>
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="3" result="b" />
             <feMerge>
@@ -63,7 +59,16 @@ export function HeroNetwork() {
 
         {Array.from({ length: K * K }, (_, id) => {
           const { x, y } = pos(id)
+          const isSource = id === highlighted[0]
+          const isDestination = id === highlighted[highlighted.length - 1]
           const onPath = highlighted.includes(id)
+          const strokeColor = isSource
+            ? 'var(--router-source)'
+            : isDestination
+              ? 'var(--router-destination)'
+              : onPath
+                ? 'var(--router-route)'
+                : 'var(--electric)'
           return (
             <g key={id}>
               <rect
@@ -71,24 +76,21 @@ export function HeroNetwork() {
                 y={y - 22}
                 width="44"
                 height="44"
-                rx="8"
+                rx="5"
                 fill="#081a36"
-                stroke={onPath ? 'var(--cyan)' : 'var(--electric)'}
-                strokeOpacity={onPath ? 1 : 0.6}
-                strokeWidth="1.5"
+                stroke={strokeColor}
+                strokeOpacity={onPath || isSource || isDestination ? 1 : 0.6}
+                strokeWidth={isSource || isDestination ? 2.5 : 1.5}
               />
-              <rect
-                x={x - 11}
-                y={y - 11}
-                width="22"
-                height="22"
-                rx="4"
-                fill="url(#core)"
-                className="animate-router-pulse"
-                style={{ animationDelay: `${(id % 5) * 0.4}s` }}
-              />
-              <text x={x} y={y + 36} textAnchor="middle" className="fill-muted-foreground font-mono" fontSize="10">
-                R{id}
+              <text
+                x={x}
+                y={y + 4}
+                textAnchor="middle"
+                fill="var(--router-label)"
+                className="pointer-events-none font-mono"
+                fontSize="12"
+              >
+                {id}
               </text>
             </g>
           )

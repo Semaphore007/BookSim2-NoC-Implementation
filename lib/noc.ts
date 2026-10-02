@@ -12,7 +12,7 @@ export type SimConfig = {
   injectionRate: number
 }
 
-export type Candidate = { dir: Direction; next: number; credit: number; maxCredit: number }
+export type Candidate = { dir: Direction; next: number }
 
 export type Hop = {
   from: number
@@ -52,9 +52,17 @@ export function destinationFor(src: number, k: number, traffic: Traffic, seed: n
       return n - 1 - src
     case 'bitrev': {
       const bits = Math.ceil(Math.log2(n))
-      let r = 0
-      for (let i = 0; i < bits; i++) if (src & (1 << i)) r |= 1 << (bits - 1 - i)
-      return r % n
+      const reverse = (value: number) => {
+        let result = 0
+        for (let i = 0; i < bits; i++) {
+          result = (result << 1) | ((value >> i) & 1)
+        }
+        return result
+      }
+      if ((n & (n - 1)) === 0) return reverse(src)
+
+      const permutation = Array.from({ length: n }, (_, id) => id).sort((a, b) => reverse(a) - reverse(b))
+      return permutation[src]
     }
     case 'hotspot':
       return Math.floor(k / 2) * k + Math.floor(k / 2)
@@ -91,34 +99,17 @@ function step(cur: number, dir: Direction, k: number) {
   return { next: ny * k + nx, wrap }
 }
 
-const dirIndex: Record<Direction, number> = { EAST: 0, WEST: 1, NORTH: 2, SOUTH: 3 }
-
-function creditFor(node: number, dir: Direction, cfg: SimConfig, seed: number, hotspot: number) {
-  const maxCredit = cfg.vcs * 4
-  const { x, y } = coords(node, cfg.k)
-  const h = coords(hotspot, cfg.k)
-  const nearHotspot = cfg.traffic === 'hotspot' ? Math.max(0, 1 - (Math.abs(x - h.x) + Math.abs(y - h.y)) / cfg.k) * 0.5 : 0
-  const load = Math.min(0.95, hash(node, dirIndex[dir], seed) * cfg.injectionRate * 2.2 + nearHotspot)
-  return { credit: Math.round(maxCredit * (1 - load)), maxCredit }
-}
-
-/** Illustrative path computation — not BookSim. Credits are synthetic. */
-export function computeRoute(src: number, dst: number, cfg: SimConfig, seed: number): Hop[] {
+/** Computes a deterministic minimal-route preview; it does not model live BookSim credit state. */
+export function computeRoute(src: number, dst: number, cfg: SimConfig): Hop[] {
   const hops: Hop[] = []
-  const hotspot = Math.floor(cfg.k / 2) * cfg.k + Math.floor(cfg.k / 2)
   let cur = src
   let guard = 0
   while (cur !== dst && guard++ < cfg.k * 4) {
     const dirs = minimalDirections(cur, dst, cfg.k, cfg.topology)
-    const candidates: Candidate[] = dirs.map((dir) => ({
-      dir,
-      next: step(cur, dir, cfg.k).next,
-      ...creditFor(cur, dir, cfg, seed, hotspot),
-    }))
-    let selected = candidates[0]
-    if (cfg.routing === 'camar' && candidates.length > 1) {
-      selected = candidates.reduce((best, c) => (c.credit > best.credit ? c : best), candidates[0])
-    }
+    const candidates: Candidate[] = dirs.map((dir) => ({ dir, next: step(cur, dir, cfg.k).next }))
+    const selected = cfg.routing === 'xy'
+      ? candidates.find((candidate) => candidate.dir === 'EAST' || candidate.dir === 'WEST') ?? candidates[0]
+      : candidates[0]
     const { next, wrap } = step(cur, selected.dir, cfg.k)
     hops.push({ from: cur, to: next, wrap, candidates, selected: selected.dir })
     cur = next

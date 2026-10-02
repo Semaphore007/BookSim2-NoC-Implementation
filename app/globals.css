@@ -71,6 +71,11 @@
   --electric: #2858c7;
   --violet: #7040b8;
   --amber: #b94d0b;
+  --router-route: var(--cyan);
+  --router-source: var(--cyan);
+  --router-destination: var(--cyan);
+  --router-current: #081a36;
+  --router-label: #d5e0f4;
 
   --surface: #eef3fb;
   --surface-deep: #e7eef9;
@@ -110,6 +115,11 @@
   --electric: #2f6bff;
   --violet: #8b5cf6;
   --amber: #fb923c;
+  --router-route: var(--amber);
+  --router-source: var(--cyan);
+  --router-destination: var(--violet);
+  --router-current: #0b2a52;
+  --router-label: #eaf2ff;
 }
 
 @layer base {
@@ -154,6 +164,12 @@
   .animate-dash {
     animation: dash 1.6s linear infinite;
   }
+  .animate-divider-pulse {
+    animation: divider-pulse 3.2s linear infinite;
+  }
+  .animate-divider-follow {
+    animation: divider-pulse 3.2s linear -1.28s infinite;
+  }
 }
 
 @keyframes fade-up {
@@ -189,6 +205,26 @@
   }
 }
 
+@keyframes divider-pulse {
+  0%,
+  100% {
+    left: 0;
+    width: 0;
+  }
+  15% {
+    left: 0;
+    width: 45%;
+  }
+  35% {
+    left: 55%;
+    width: 45%;
+  }
+  60% {
+    left: 100%;
+    width: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -198,5 +234,15 @@
   .animate-router-pulse,
   .animate-dash {
     animation: none;
+  }
+  .animate-divider-pulse {
+    animation: none;
+    left: 0;
+    width: 45%;
+  }
+  .animate-divider-follow {
+    animation: none !important;
+    left: 55%;
+    width: 0;
   }
 }
