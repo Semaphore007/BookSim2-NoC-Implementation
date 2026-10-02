@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { Info, Pause, Play, RotateCcw } from 'lucide-react'
+import { Pause, Play, RotateCcw } from 'lucide-react'
 import { SimulationControls } from '@/components/simulation/simulation-controls'
 import { NoCVisualizer } from '@/components/simulation/noc-visualizer'
 import { RoutingDecision } from '@/components/simulation/routing-decision'
+import { WarningDisclosure } from '@/components/warning-disclosure'
 import { computeRoute, destinationFor, type SimConfig, trafficLabels } from '@/lib/noc'
 import { estimateFromBenchmarks, parseBenchmarkCsv, type BenchmarkSample } from '@/lib/benchmark-data'
 
@@ -152,10 +153,9 @@ export function SimulationLab() {
         />
 
         {hops.length === 0 && (
-          <p className="mt-3 flex items-center gap-2 text-sm text-amber-glow">
-            <Info className="size-4" aria-hidden="true" /> This source maps to itself under {trafficLabels[config.traffic]}. Click
-            another router.
-          </p>
+          <WarningDisclosure title="No route for this source" className="mt-3">
+            This source maps to itself under {trafficLabels[config.traffic]}. Click another router.
+          </WarningDisclosure>
         )}
 
         <dl className="mt-5 grid grid-cols-2 gap-3 font-mono text-sm sm:grid-cols-4">
@@ -183,9 +183,9 @@ export function SimulationLab() {
         <section className="mt-5 rounded-xl border border-border bg-background/40 p-4" aria-live="polite">
           <h3 className="font-serif font-semibold">BookSim benchmark estimate</h3>
           {!benchmark ? (
-            <p className="mt-2 text-sm text-muted-foreground">
-              No dataset loaded. Route visualization is available, but no latency or throughput prediction is shown.
-            </p>
+            <WarningDisclosure title="No dataset loaded" className="mt-3">
+              Route visualization remains available, but latency and throughput predictions are hidden until a dataset is loaded.
+            </WarningDisclosure>
           ) : estimate ? (
             <>
               <dl className="mt-3 grid grid-cols-2 gap-3 font-mono text-sm">
@@ -198,18 +198,18 @@ export function SimulationLab() {
                   <dd className="mt-1">{estimate.throughput.toFixed(4)}</dd>
                 </div>
               </dl>
-              <p className="mt-3 text-xs text-muted-foreground">
+              <WarningDisclosure title="About this estimate" className="mt-3">
                 {estimate.kind === 'measured'
                   ? `Measured value at injection rate ${estimate.lowerRate}.`
                   : `Linear interpolation between measured rates ${estimate.lowerRate} and ${estimate.upperRate}; not a new BookSim run.`}
                 {' '}Source: {benchmark.fileName}.
-              </p>
+              </WarningDisclosure>
             </>
           ) : (
-            <p className="mt-2 text-sm text-muted-foreground">
+            <WarningDisclosure title="No matching benchmark" className="mt-3">
               No matching benchmark for this topology, size, routing, traffic, and VC configuration with measured rates on
               both sides of {config.injectionRate.toFixed(2)}. No estimate or extrapolation is shown.
-            </p>
+            </WarningDisclosure>
           )}
         </section>
       </section>

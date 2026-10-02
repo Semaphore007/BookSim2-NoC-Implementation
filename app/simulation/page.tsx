@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import { AlertTriangle, ArrowDown, Code2 } from 'lucide-react'
+import { ArrowDown, Code2 } from 'lucide-react'
 import { PageHeader, SectionTitle } from '@/components/section-title'
 import { SimulationLab } from '@/components/simulation/simulation-lab'
+import { WarningDisclosure } from '@/components/warning-disclosure'
 import { CodeBlock } from '@/components/code-block'
 import { LinkButton } from '@/components/link-button'
 
@@ -50,17 +51,11 @@ export default function SimulationPage() {
       />
 
       <section className="mx-auto max-w-[1400px] px-4 py-12 sm:px-6">
-        <div
-          role="note"
-          className="mb-6 flex gap-3 rounded-xl border border-amber-glow/40 bg-amber-glow/5 p-4 text-sm leading-relaxed"
-        >
-          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-glow" aria-hidden="true" />
-          <p>
-            The route animation is a deterministic preview, not a cycle-accurate BookSim run. Import a BookSim CSV in
-            the configuration panel to see measured values or interpolations between measurements. Without matching
-            dataset rows, performance estimates are not shown.
-          </p>
-        </div>
+        <WarningDisclosure title="About simulation results" className="mb-6">
+          The route animation is a deterministic preview, not a cycle-accurate BookSim run. Import a BookSim CSV in
+          the configuration panel to see measured values or interpolations between measurements. Without matching
+          dataset rows, performance estimates are not shown.
+        </WarningDisclosure>
         <SimulationLab />
       </section>
 

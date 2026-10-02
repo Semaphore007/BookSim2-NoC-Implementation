@@ -3,6 +3,7 @@ import { ArrowUpRight, BookOpen, Cloud, Code2, FileDown, Globe, Terminal } from 
 import { PageHeader } from '@/components/section-title'
 import { LinkButton } from '@/components/link-button'
 import { GithubIcon } from '@/components/icons'
+import { WarningDisclosure } from '@/components/warning-disclosure'
 import { links } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ const resources = [
   { icon: BookOpen, title: 'BookSim 2 Manual', href: links.booksimManual, text: "Official BookSim 2 User's Guide." },
   { icon: Globe, title: 'BookSim Website', href: links.booksimWebsite, text: 'Official BookSim information/resource page.' },
   { icon: FileDown, title: 'Project Manual PDF', href: links.manualPdf, text: 'Step-by-step project manual (Google Drive).' },
-  { icon: Terminal, title: 'Online C++ Compiler', href: links.onlineGdb, text: 'Useful for testing small C++ snippets. It is NOT a native BookSim simulator.' },
+  { icon: Terminal, title: 'Online C++ Compiler', href: links.onlineGdb, text: 'Useful for testing small C++ snippets.' },
   { icon: Cloud, title: 'GitHub Codespaces', href: links.codespaces, text: 'Useful for running Linux-based development environments when available.' },
 ]
 
@@ -72,9 +73,9 @@ export default function ResourcesPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-6 text-xs text-muted-foreground">
+        <WarningDisclosure title="About online development tools" className="mt-6">
           OnlineGDB and Codespaces do not automatically run this BookSim project; they are general development tools.
-        </p>
+        </WarningDisclosure>
       </section>
     </>
   )

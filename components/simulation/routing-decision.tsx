@@ -1,5 +1,6 @@
 import type { Hop, Routing } from '@/lib/noc'
 import { cn } from '@/lib/utils'
+import { WarningDisclosure } from '@/components/warning-disclosure'
 
 export function RoutingDecision({
   hop,
@@ -66,7 +67,9 @@ export function RoutingDecision({
           </p>
         </>
       )}
-      <p className="mt-4 text-xs text-muted-foreground">A route preview is not a cycle-accurate BookSim run.</p>
+      <WarningDisclosure title="About this route preview" className="mt-4">
+        This route preview is not a cycle-accurate BookSim run.
+      </WarningDisclosure>
     </section>
   )
 }

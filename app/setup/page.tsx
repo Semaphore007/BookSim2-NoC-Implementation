@@ -3,6 +3,7 @@ import { PageHeader, SectionTitle } from '@/components/section-title'
 import { CodeBlock } from '@/components/code-block'
 import { LinkButton } from '@/components/link-button'
 import { GithubIcon } from '@/components/icons'
+import { WarningDisclosure } from '@/components/warning-disclosure'
 import { links } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -86,9 +87,9 @@ export default function SetupPage() {
             </span>
           </div>
           <CodeBlock code={exampleOutput} filename="booksim — stdout" language="text" />
-          <p className="mt-2 text-xs text-muted-foreground">
+          <WarningDisclosure title="About the example output" className="mt-3">
             Representative format only. These numbers are illustrative and are not measured project results.
-          </p>
+          </WarningDisclosure>
         </div>
       </section>
 

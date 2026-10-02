@@ -21,13 +21,13 @@ const TOKEN = new RegExp(
 )
 
 const tokenClass: Record<string, string> = {
-  comment: 'text-[#6b7fa3] italic',
-  string: 'text-amber-glow',
-  prompt: 'text-violet-glow select-none',
-  number: 'text-violet-glow',
-  keyword: 'text-[#7aa2ff]',
-  key: 'text-cyan-glow',
-  fn: 'text-[#5eead4]',
+  comment: 'text-[var(--code-comment)] italic',
+  string: 'text-[var(--code-string)]',
+  prompt: 'text-[var(--code-prompt)] select-none',
+  number: 'text-[var(--code-prompt)]',
+  keyword: 'text-[var(--code-keyword)]',
+  key: 'text-[var(--code-key)]',
+  fn: 'text-[var(--code-function)]',
 }
 
 export function highlight(code: string) {
@@ -72,8 +72,8 @@ export function CodeBlock({
   }
 
   return (
-    <figure className={cn('overflow-hidden rounded-xl border border-border bg-[#030915]', className)}>
-      <figcaption className="flex items-center justify-between gap-3 border-b border-border bg-[#071125] px-4 py-2">
+    <figure className={cn('overflow-hidden rounded-xl border border-border bg-[var(--code-background)]', className)}>
+      <figcaption className="flex items-center justify-between gap-3 border-b border-border bg-[var(--code-header)] px-4 py-2">
         <span className="flex min-w-0 items-center gap-2 font-mono text-xs text-muted-foreground">
           <FileCode2 className="size-3.5 shrink-0 text-cyan-glow" aria-hidden="true" />
           <span className="truncate">{filename ?? 'snippet'}</span>
@@ -89,7 +89,7 @@ export function CodeBlock({
           <span aria-live="polite">{copied ? 'Copied' : 'Copy'}</span>
         </button>
       </figcaption>
-      <pre className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-[#dbe6ff]">
+      <pre className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-[var(--code-foreground)]">
         <code>{highlight(code)}</code>
       </pre>
     </figure>

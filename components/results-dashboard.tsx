@@ -5,6 +5,7 @@ import { RotateCcw, Upload } from 'lucide-react'
 import { SimpleChart } from '@/components/simple-chart'
 import { MetricCard } from '@/components/metric-card'
 import { DemoBadge } from '@/components/section-title'
+import { WarningDisclosure } from '@/components/warning-disclosure'
 import { demoLatencyData, demoMetrics, demoThroughputData, type Series } from '@/lib/demo-data'
 
 type Imported = { name: string; latency: Series[]; throughput: Series[] }
@@ -58,7 +59,7 @@ export function ResultsDashboard() {
         <div className="flex items-center gap-3">
           {badge}
           <span className="text-sm text-muted-foreground">
-            {data ? 'Showing data from your CSV (parsed locally in the browser).' : 'Placeholder curves — not experimental results.'}
+            {data ? 'Showing data from your CSV (parsed locally in the browser).' : 'Showing placeholder demo curves.'}
           </span>
         </div>
         <div className="flex gap-2">
@@ -93,6 +94,13 @@ export function ResultsDashboard() {
         <p role="alert" className="mb-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm">
           {error}
         </p>
+      )}
+
+      {!data && (
+        <WarningDisclosure title="About the demo results" className="mb-6">
+          These placeholder curves and metrics are illustrative only; they are not experimental results. Import your
+          BookSim CSV to display your measurements.
+        </WarningDisclosure>
       )}
 
       {!data && (

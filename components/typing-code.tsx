@@ -29,8 +29,8 @@ export function TypingCode({
     'flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs text-muted-foreground transition hover:border-cyan-glow/50 hover:text-foreground disabled:opacity-40'
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-[#030915] glow-border">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-[#071125] px-4 py-2">
+    <div className="overflow-hidden rounded-xl border border-border bg-[var(--code-background)] glow-border">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-[var(--code-header)] px-4 py-2">
         <div className="flex items-center gap-2">
           <span className="flex gap-1.5" aria-hidden="true">
             <span className="size-2.5 rounded-full bg-[#ff5f57]/80" />
@@ -58,7 +58,7 @@ export function TypingCode({
           </button>
         </div>
       </div>
-      <pre className="min-h-56 overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-[#dbe6ff]" aria-label={`${filename} contents`}>
+      <pre className="min-h-56 overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-[var(--code-foreground)]" aria-label={`${filename} contents`}>
         <code>
           {highlight(code.slice(0, count))}
           <span className="ml-px inline-block h-4 w-2 translate-y-0.5 bg-cyan-glow animate-blink" aria-hidden="true" />

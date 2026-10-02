@@ -76,6 +76,15 @@
   --router-destination: var(--cyan);
   --router-current: #081a36;
   --router-label: #d5e0f4;
+  --code-background: #f8faff;
+  --code-header: #eaf0fb;
+  --code-foreground: #24344f;
+  --code-comment: #61728c;
+  --code-string: #a43c00;
+  --code-prompt: #6b3eb0;
+  --code-keyword: #2551a4;
+  --code-key: #08717a;
+  --code-function: #087f69;
 
   --surface: #eef3fb;
   --surface-deep: #e7eef9;
@@ -120,6 +129,15 @@
   --router-destination: var(--violet);
   --router-current: #0b2a52;
   --router-label: #eaf2ff;
+  --code-background: #030915;
+  --code-header: #071125;
+  --code-foreground: #dbe6ff;
+  --code-comment: #6b7fa3;
+  --code-string: var(--amber);
+  --code-prompt: var(--violet);
+  --code-keyword: #7aa2ff;
+  --code-key: var(--cyan);
+  --code-function: #5eead4;
 }
 
 @layer base {
