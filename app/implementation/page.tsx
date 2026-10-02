@@ -61,6 +61,7 @@ sim_type = latency;`,
     text: 'CAMAR gathers minimal output ports, then picks the one with more downstream credits.',
     filename: 'src/routefunc.cpp (sketch)',
     language: 'cpp',
+    wrapLines: true,
     code: `void camar_mesh( const Router *r, const Flit *f, int in_channel,
                  OutputSet *outputs, bool inject )
 {
@@ -159,7 +160,12 @@ export default function ImplementationPage() {
                 <h3 className="font-serif text-xl font-semibold">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
               </div>
-              <CodeBlock code={s.code} filename={s.filename} language={s.language} />
+              <CodeBlock
+                code={s.code}
+                filename={s.filename}
+                language={s.language}
+                wrapLines={'wrapLines' in s && s.wrapLines}
+              />
             </article>
           ))}
           <p className="text-xs text-muted-foreground">

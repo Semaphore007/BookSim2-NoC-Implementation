@@ -53,11 +53,13 @@ export function CodeBlock({
   filename,
   language,
   className,
+  wrapLines = false,
 }: {
   code: string
   filename?: string
   language?: string
   className?: string
+  wrapLines?: boolean
 }) {
   const [copied, setCopied] = useState(false)
 
@@ -89,7 +91,12 @@ export function CodeBlock({
           <span aria-live="polite">{copied ? 'Copied' : 'Copy'}</span>
         </button>
       </figcaption>
-      <pre className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-[var(--code-foreground)]">
+      <pre
+        className={cn(
+          'overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-[var(--code-foreground)]',
+          wrapLines && 'whitespace-pre-wrap [overflow-wrap:anywhere]',
+        )}
+      >
         <code>{highlight(code)}</code>
       </pre>
     </figure>
