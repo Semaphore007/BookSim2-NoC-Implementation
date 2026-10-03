@@ -1,7 +1,5 @@
  🌐 BookSim2-NoC-Implementation
-```
 
----
 
 ## 📖 Overview
 
@@ -25,13 +23,10 @@ The project focuses on understanding how different NoC architectures, routing al
 - Comparative topology evaluation
 - Web-based visualization
 
----
 
 # 🎯 Project Objectives
 
 The project is organized into three major tasks.
-
----
 
 ## 1. Design-Space Exploration
 
@@ -81,7 +76,6 @@ The first task evaluates different NoC configurations to understand their impact
 
 ### Design-Space Exploration Flow
 
-```text
                     ┌─────────────────────┐
                     │   Select Topology   │
                     └──────────┬──────────┘
@@ -131,9 +125,9 @@ The first task evaluates different NoC configurations to understand their impact
                     ┌─────────────────────┐
                     │ Analyze Performance │
                     └─────────────────────┘
-````
 
----
+
+
 
  # 2\. 🎯 Target NoC Topology
 
