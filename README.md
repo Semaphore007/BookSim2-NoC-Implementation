@@ -883,11 +883,3 @@ Traffic Patterns
 - Telegram: https://t.me/TheOutlier\_2003
 
 ---
-
- # 🌐 Network-on-Chip Project
-
- \<p align="center"\> **Implementation • Simulation • Analysis**
-
- Built for **Multicore Systems Architecture**
-
- \</p\> \`\`\` :::
