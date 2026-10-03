@@ -1,6 +1,5 @@
-````
  🌐 BookSim2-NoC-Implementation
-
+```
 
 ---
 
