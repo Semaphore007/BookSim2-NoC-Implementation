@@ -1,181 +1,311 @@
-```markdown
-# 🌐 BookSim2-NoC-Implementation
+🌐 BookSim2-NoC-Implementation
+<h2 align="center">Network-on-Chip Implementation & Simulation using BookSim 2</h2> <p align="center"> A practical implementation and analysis project for exploring NoC topologies, routing algorithms, traffic patterns, congestion, latency, throughput, and saturation behavior. </p>
+📖 Overview
 
-<p align="center">
-  <img src="https://img.shields.io/badge/NoC-Network--on--Chip-00D9FF?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/BookSim-2.0-1677FF?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/C%2B%2B-Implementation-00599C?style=for-the-badge&logo=cplusplus&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Next.js-Web-000000?style=for-the-badge&logo=next.js"/>
-</p>
+BookSim2-NoC-Implementation is a Network-on-Chip (NoC) research and experimentation project built around BookSim 2, a cycle-accurate interconnection-network simulator.
 
-<h2 align="center">Network-on-Chip Implementation & Simulation using BookSim 2</h2>
+The project combines:
 
-<p align="center">
-A practical project for exploring NoC topologies, routing algorithms,
-traffic patterns, congestion, latency, throughput, and saturation.
-</p>
+NoC topology exploration
 
----
+Routing algorithm implementation
 
-## 📌 Overview
+Virtual-channel configuration
 
-This project studies **Network-on-Chip (NoC)** architectures using **BookSim 2**, a cycle-accurate interconnection-network simulator.
+Traffic-pattern analysis
 
-The project covers:
+Injection-rate sweeps
 
-- NoC topology exploration
-- Routing algorithms
-- Virtual channels
-- Traffic patterns
-- Injection-rate sweeps
-- Latency and throughput analysis
-- Saturation behavior
-- Target topology comparison
-- Congestion-aware routing
+Latency and throughput measurement
 
----
+Saturation analysis
 
-## 🎯 Project Tasks
+Congestion-aware routing
 
-### Task 1 — Design-Space Exploration
+Comparative topology evaluation
 
-Evaluate:
+Web-based visualization
 
-- **Topologies:** Mesh, Torus, Butterfly, Fat Tree
-- **Sizes:** 4×4, 6×6, 8×8
-- **VCs:** 1, 2, 4, 8
-- **Traffic:** Uniform, Transpose, Bit Complement, Bit Reverse, Hotspot
+The primary objective is to understand how different network architectures and routing strategies affect NoC performance under varying traffic conditions.
 
-Measure:
+🎯 Project Objectives
 
-- Average packet latency
-- Throughput
-- Injection rate
-- Saturation throughput
+The project is divided into three major tasks.
 
-Generate:
+1. Design-Space Exploration
 
-- Latency vs Injection Rate
-- Throughput vs Injection Rate
+Evaluate the performance impact of different network configurations.
 
-### Task 2 — Target NoC Topology
+Topologies
 
-Implement and evaluate a selected target topology and compare it with an equivalent Mesh using the same:
+Mesh
 
-- Node count
-- Packet/flit configuration
-- VC configuration
-- Traffic patterns
-- Injection-rate range
+Torus
 
-Analyze connectivity, hop count, path diversity, and link utilization.
+Butterfly
 
-### Task 3 — CAMAR Routing
+Fat Tree
 
-Implement:
+Network Sizes
 
-**CAMAR — Credit-Aware Minimal Adaptive Routing**
+4 × 4
 
-CAMAR selects valid minimal paths while considering local congestion/credit information.
+6 × 6
 
-```text
-Router
-  ↓
-Generate Minimal Candidates
-  ↓
-Check Credit / Congestion
-  ↓
-Select Candidate
-  ↓
-Forward Flit
-```
+8 × 8
 
----
+Virtual Channels
 
-## 🛠️ Technology Stack
+1 VC
 
-**Website**
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- SVG
+2 VCs
 
-**Simulation**
-- C++
-- BookSim 2
+4 VCs
 
-**Analysis**
-- Python
-- Pandas
-- Matplotlib
+8 VCs
 
----
+Traffic Patterns
 
-## 📂 Repository Structure
+Uniform
 
-```text
+Transpose
+
+Bit Complement
+
+Bit Reverse
+
+Hotspot
+
+Metrics
+
+The experiments measure:
+
+Average packet latency
+
+Throughput
+
+Injection rate
+
+Saturation throughput
+
+Hop count
+
+Link utilization
+
+Generated Plots
+
+Latency vs. Injection Rate
+
+Throughput vs. Injection Rate
+
+2. Target NoC Topology
+
+A selected target topology is implemented and evaluated against an equivalent Mesh configuration.
+
+The comparison maintains equivalent experimental parameters wherever applicable:
+
+Same node count
+
+Same packet/flit configuration
+
+Same number of virtual channels
+
+Same traffic patterns
+
+Same injection-rate range
+
+The analysis focuses on:
+
+Network connectivity
+
+Average hop count
+
+Path diversity
+
+Link utilization
+
+Latency
+
+Throughput
+
+Saturation behavior
+
+3. CAMAR Routing
+
+The project implements:
+
+CAMAR — Credit-Aware Minimal Adaptive Routing
+
+CAMAR selects among valid minimal paths while considering local congestion and credit availability.
+
+The routing process can be summarized as:
+
+                 ┌─────────────────────┐
+                 │       Router        │
+                 └──────────┬──────────┘
+                            ↓
+                 ┌─────────────────────┐
+                 │ Generate Minimal    │
+                 │ Candidate Paths     │
+                 └──────────┬──────────┘
+                            ↓
+                 ┌─────────────────────┐
+                 │ Check Credits /     │
+                 │ Congestion          │
+                 └──────────┬──────────┘
+                            ↓
+                 ┌─────────────────────┐
+                 │ Select Candidate    │
+                 │ Output Port         │
+                 └──────────┬──────────┘
+                            ↓
+                 ┌─────────────────────┐
+                 │ Forward Flit        │
+                 └─────────────────────┘
+
+
+The objective is to retain minimal routing while using local network-state information to make more adaptive routing decisions.
+
+🏗️ System Architecture
+
+The project consists of three primary layers:
+
+┌───────────────────────────────────────────────┐
+│                  Web Interface                │
+│             Next.js + React + TS              │
+└───────────────────────┬───────────────────────┘
+                        │
+                        ↓
+┌───────────────────────────────────────────────┐
+│              Visualization Layer              │
+│       Charts • Topologies • Simulations       │
+└───────────────────────┬───────────────────────┘
+                        │
+                        ↓
+┌───────────────────────────────────────────────┐
+│             BookSim 2 Simulation              │
+│        C++ • Routing • Traffic • NoC          │
+└───────────────────────┬───────────────────────┘
+                        │
+                        ↓
+┌───────────────────────────────────────────────┐
+│              Experimental Results             │
+│       Latency • Throughput • Saturation       │
+└───────────────────────────────────────────────┘
+
+🛠️ Technology Stack
+Web Application
+
+Next.js
+
+React
+
+TypeScript
+
+Tailwind CSS
+
+SVG
+
+Network Simulation
+
+C++
+
+BookSim 2
+
+Data Analysis
+
+Python
+
+Pandas
+
+Matplotlib
+
+📂 Repository Structure
 BookSim2-NoC-Implementation/
-├── app/
-├── components/
-├── lib/
-├── public/
-├── package.json
-├── next.config.mjs
-├── tsconfig.json
-└── README.md
-```
+│
+├── app/                    # Next.js application routes
+├── components/             # Reusable React components
+├── lib/                    # Utilities and application logic
+├── public/                 # Static assets
+│
+├── package.json            # Node.js dependencies and scripts
+├── next.config.mjs         # Next.js configuration
+├── tsconfig.json           # TypeScript configuration
+│
+└── README.md               # Project documentation
 
----
 
-## ⚙️ Run the Website
+BookSim 2 is maintained separately from the web application and should be cloned independently for native cycle-accurate experiments.
 
-```bash
+🚀 Getting Started
+Prerequisites
+
+Make sure the following are installed:
+
+Node.js
+
+npm
+
+C++ compiler
+
+GNU Make
+
+Python 3.x
+
+Git
+
+💻 Run the Web Application
+
+Clone the repository:
+
 git clone https://github.com/Semaphore007/BookSim2-NoC-Implementation.git
 cd BookSim2-NoC-Implementation
+
+
+Install dependencies:
+
 npm install
+
+
+Start the development server:
+
 npm run dev
-```
 
-Open:
 
-```text
+Open the application at:
+
 http://localhost:3000
-```
 
----
+🔬 BookSim 2 Setup
 
-## 🔬 Run BookSim 2
+Clone the BookSim 2 repository:
 
-Clone the official simulator:
-
-```bash
 git clone https://github.com/booksim/booksim2.git
 cd booksim2
+
+
+Build BookSim:
+
 make
-```
+
 
 Run a configuration:
 
-```bash
 ./booksim [configfile]
-```
 
-Example:
 
-```bash
+For example:
+
 ./booksim examples/torus88
-```
 
-Official repository:
+Official BookSim 2 Repository
 
 https://github.com/booksim/booksim2
 
----
+⚙️ Example BookSim Configuration
 
-## ⚙️ Example Configuration
+A basic Torus configuration can be represented as:
 
-```text
 topology = torus;
 k = 8;
 n = 2;
@@ -183,86 +313,130 @@ routing_function = dim_order;
 num_vcs = 4;
 traffic = uniform;
 injection_rate = 0.15;
-```
 
----
 
-## 📊 Performance Metrics
+The exact configuration should be adjusted according to the topology, routing algorithm, traffic pattern, and experiment being evaluated.
 
-| Metric | Description |
-|---|---|
-| Latency | Average packet delivery delay |
-| Throughput | Successfully delivered traffic |
-| Injection Rate | Offered network load |
-| Saturation | Point where additional load provides limited throughput improvement |
-| Hop Count | Average number of router hops |
-| Link Utilization | Network link usage |
+🧪 Experimental Methodology
 
----
+Experiments follow a consistent workflow to ensure meaningful comparisons.
 
-## 📈 Experimental Workflow
+┌──────────────────────┐
+│ Configure Network    │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Select Topology      │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Select Routing       │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Select Traffic       │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Sweep Injection Rate │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Run BookSim 2        │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Collect Results      │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Generate Plots       │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Analyze Performance  │
+└──────────────────────┘
 
-```text
-Configure Network
-      ↓
-Select Topology
-      ↓
-Select Traffic Pattern
-      ↓
-Sweep Injection Rate
-      ↓
-Run BookSim
-      ↓
-Collect Results
-      ↓
-Generate Graphs
-      ↓
-Analyze Performance
-```
+📊 Performance Metrics
+Metric	Description
+Latency	Average delay experienced by packets in the network
+Throughput	Amount of traffic successfully delivered by the network
+Injection Rate	Offered traffic load injected into the network
+Saturation	Region where increasing offered load produces limited additional throughput
+Hop Count	Average number of router-to-router hops taken by packets
+Link Utilization	Degree to which network links are being used
+📈 Expected Analysis
 
----
+The experiments investigate how network performance changes with:
 
-## ⚠️ Experimental Integrity
+Different topologies
 
-All final numerical results should come from **actual BookSim simulations**.
+Increasing network size
 
-Any demo values used in the website are for visualization only and must not be presented as experimental measurements.
+Different virtual-channel counts
 
-The browser simulation is a visualization tool; native BookSim is used for actual cycle-accurate experiments.
+Different traffic distributions
 
----
+Increasing injection rates
 
-## 📖 Documentation
+Different routing algorithms
 
-📘 **[Project Manual](https://drive.google.com/file/d/12KcAQ8A6q4ta_Nwh9v-WM4zJueScywSv/view?usp=sharing)**
+Network congestion
 
-Useful resources:
+The relationship between network load and performance is analyzed through:
 
-- [BookSim 2](https://github.com/booksim/booksim2)
-- [BookSim Manual](https://github.com/booksim/booksim2/blob/master/doc/manual.tex)
-- [Stanford BookSim](https://nocs.stanford.edu/booksim.html)
+Injection Rate
+       ↓
+Network Load
+       ↓
+Congestion
+       ↓
+Latency Increase
+       ↓
+Saturation
 
----
+⚠️ Experimental Integrity
 
-## 👨‍💻 Author
+All final numerical results presented as experimental findings should be generated from actual BookSim 2 simulations.
 
-### Siddharth Gautam
+Demo or illustrative values used by the web interface are intended only for visualization and must not be presented as measured experimental results.
 
-**Computer Science & Engineering**
+The browser-based simulation and visualization components are designed for interaction and demonstration, while native BookSim 2 is used for cycle-accurate experimental evaluation.
 
-- GitHub: https://github.com/Semaphore007
-- LinkedIn: https://www.linkedin.com/in/siddharth-gautam-883539238/
-- Telegram: https://t.me/TheOutlier_2003
+📚 Documentation & References
+Project Documentation
 
----
+Project Manual
+
+https://drive.google.com/file/d/12KcAQ8A6q4ta_Nwh9v-WM4zJueScywSv/view?usp=sharing
+
+BookSim Resources
+
+BookSim 2 Repository
+https://github.com/booksim/booksim2
+
+BookSim 2 Manual
+https://github.com/booksim/booksim2/blob/master/doc/manual.tex
+
+Stanford BookSim
+https://nocs.stanford.edu/booksim.html
+
+👨‍💻 Author
+Siddharth Gautam
+
+Computer Science & Engineering
+
+GitHub: https://github.com/Semaphore007
+
+LinkedIn: https://www.linkedin.com/in/siddharth-gautam-883539238/
+
+Telegram: https://t.me/TheOutlier_2003
 
 <p align="center">
+🌐 Network-on-Chip Project
 
-### 🌐 Network-on-Chip Project
+Implementation • Simulation • Analysis
 
-**Implementation • Simulation • Analysis**
-
-Built for **Multicore Systems Architecture**
+Built for Multicore Systems Architecture
 
 </p>
-```
